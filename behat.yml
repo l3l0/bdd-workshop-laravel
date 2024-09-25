@@ -1,0 +1,17 @@
+default:
+    extensions:
+        Soulcodex\Behat:
+            kernel: # Default values
+                bootstrap_path: '/bootstrap/app.php'
+                environment_path: '.env.testing'
+        Behat\MinkExtension: # Default mink extension configuration
+            default_session: laravel
+            laravel: ~
+
+    # Your test suites here
+    suites:
+        user:
+            paths: [ '%paths.base%/features' ]
+            # The context needed by your features tests
+            contexts:
+              - Tests\Behat\MainContext: ~

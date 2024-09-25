@@ -1,0 +1,51 @@
+services:
+  base:
+    build:
+      context: ./
+      dockerfile: ./docker/base/Dockerfile
+    image: bdd-workshop-base
+    container_name: bdd-workshop-base
+  application:
+    container_name: bdd-workshop-application
+    image: bdd-workshop-backend
+    depends_on:
+      - base
+    build:
+      context: ./
+      dockerfile: ./docker/dev/Dockerfile
+    volumes:
+      - ./docker/dev/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
+      - .:/home/www
+    networks:
+      - default
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD:-main}
+      DB_USERNAME: ${DB_USERNAME:-main}
+      DB_DATABASE: ${DB_DATABASE:-main}
+      DB_HOST: ${DB_HOST:-bdd-workshop-db}
+      DB_PORT: ${DB_PORT:-5432}
+    ports:
+      - "9090:80"
+      - "5173:5173"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  database:
+    image: 'postgres:16.3-alpine'
+    container_name: bdd-workshop-db
+    environment:
+      POSTGRES_PASSWORD: main
+      POSTGRES_USER: main
+      POSTGRES_DB: main
+    ports:
+      # To allow the host machine to access the ports below, modify the lines below.
+      # For example, to allow the host to connect to port 3306 on the container, you would change
+      # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
+      # See https://docs.docker.com/compose/compose-file/#ports for more information.
+      - '5432'
+    volumes:
+      - bdd-workshop-postgresql:/var/lib/postgresql/data
+
+
+volumes:
+  bdd-workshop-postgresql:
+    external: true
