@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Factory\ProductCreatorInterface;
@@ -12,10 +14,10 @@ readonly class CreateProduct
 
     public function __invoke(CreateProduct\Command $command): void
     {
-        $product = $this->productCreator->create($command);
         if ($this->productCatalogue->existsForType($command->productType)) {
             return;
         }
+        $product = $this->productCreator->create($command);
         $this->productCatalogue->save($product);
     }
 }
