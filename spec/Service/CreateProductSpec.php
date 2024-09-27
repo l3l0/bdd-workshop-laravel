@@ -2,7 +2,7 @@
 
 namespace spec\App\Service;
 
-use App\Models\Product;
+use App\Models\ProductInterface;
 use App\Service\CreateProduct;
 use App\Repository\ProductCatalogueInterface;
 use App\Factory\ProductCreatorInterface;
@@ -22,7 +22,7 @@ class CreateProductSpec extends ObjectBehavior
     function it_saves_created_product_in_catalog(
         ProductCatalogueInterface $productCatalogue,
         ProductCreatorInterface $productCreator,
-        Product $product
+        ProductInterface $product
     ) {
         // arrange
         $command = new CreateProduct\Command(
