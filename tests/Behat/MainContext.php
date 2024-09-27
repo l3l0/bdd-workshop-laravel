@@ -4,9 +4,73 @@ declare(strict_types=1);
 
 namespace Tests\Behat;
 
+use App\Models\Product;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Behat\Tester\Exception\PendingException;
+use PHPUnit\Framework\Assert;
 use Soulcodex\Behat\Addon\Context;
 
 class MainContext extends Context
 {
+    /**
+     * @BeforeScenario
+     */
+    public function clearDatabase(): void
+    {
+        Product::query()->delete();
+    }
 
+    /**
+     * @When chce utworzyć nowy produkt leasingowy z takimi danymi:
+     */
+    public function chceUtworzycNowyProduktLeasingowyZTakimiDanymi(TableNode $table)
+    {
+        $mapTypes = [
+            'LpsMax' => 1,
+            'PasMax' => 2,
+            'None' => 0
+        ];
+        foreach ($table as $row) {
+            $array = [
+                'product_type' => $mapTypes[$row['type']],
+                'name' => $row['Nazwa produktu'],
+                'is_collective' => $row['zbiorczy'] === 'tak',
+                'is_leasing_product' => $row['czy_leasingowy'] === 'tak',
+                'rp_ratings' => [
+                    'a' => $row['rating a'],
+                    'b' => $row['rating b'],
+                    'c' => $row['rating c'],
+                    's' => $row['rating s'],
+                ]
+            ];
+
+            /**
+             * @var \Soulcodex\Behat\Driver\KernelDriver $driver
+             */
+            $driver = $this->getSession()->getDriver();
+
+            $driver->getClient()->request('POST', '/create_product', [], [], [
+                'CONTENT_TYPE' => 'application/json',
+            ], json_encode($array, JSON_THROW_ON_ERROR));
+
+            $response = $driver->getClient()->getResponse();
+
+            Assert::assertEquals(201, $response->getStatusCode());
+        }
+    }
+
+    /**
+     * @When dodam go do wersji kalkulacji 1.54.2
+     */
+    public function dodamGoDoWersjiKalkulacji()
+    {
+    }
+
+    /**
+     * @Then taki produkt powinnen aktywować się w systemie i być dostępny dla kalkulacji leasingu.
+     */
+    public function takiProduktPowinnenAktywowacSieWSystemieIBycDostepnyDlaKalkulacjiLeasingu()
+    {
+        throw new PendingException();
+    }
 }

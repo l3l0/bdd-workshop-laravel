@@ -10,7 +10,6 @@ use App\Service\CreateProduct\Command;
 
 class EloquentProductCreator implements ProductCreatorInterface
 {
-
     public function create(Command $command): ProductInterface
     {
         $product = Product::factory()->make([

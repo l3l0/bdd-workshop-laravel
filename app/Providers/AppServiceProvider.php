@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Factory\EloquentProductCreator;
+use App\Factory\ProductCreatorInterface;
+use App\Repository\EloquentProductCatalogoue;
+use App\Repository\ProductCatalogueInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +15,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(
+            ProductCatalogueInterface::class,
+            EloquentProductCatalogoue::class
+        );
+        $this->app->singleton(
+            ProductCreatorInterface::class,
+            EloquentProductCreator::class
+        );
     }
 
     /**
