@@ -2,10 +2,11 @@
 
 namespace App\Repository;
 
+use App\Models\Product;
+use App\Models\Product\ProductType;
+
 interface ProductCatalogueInterface
 {
-
-    public function existsForType($argument1);
-
-    public function save($argument1);
+    public function existsForType(ProductType $productType): bool;
+    public function save(Product $product): void;
 }

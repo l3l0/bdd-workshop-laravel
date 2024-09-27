@@ -32,7 +32,7 @@ permissions: # set permissions on docker container (use EXEC_COMMAND to run with
 	${EXEC_COMMAND} setfacl -dR -m u:www:rwX storage/
 copy_env_vars: # copy default env vars
 	cp -n .env.example .env
-test: create_test_database migration_test phpunit # behat # run tests (use EXEC_COMMAND to run without docker compose, use PHPUNIT_TEST_PATH to run specific tests)
+test: create_test_database migration_test phpunit phpspec behat # run tests (use EXEC_COMMAND to run without docker compose, use PHPUNIT_TEST_PATH to run specific tests)
 migration: # run migrations (use EXEC_COMMAND to run without docker compose)
 	${EXEC_COMMAND} php artisan migrate
 create_test_database: # create test database (use EXEC_COMMAND to run without docker compose)
@@ -42,6 +42,8 @@ migration_test: # run migrations for test (use EXEC_COMMAND to run without docke
 	${EXEC_COMMAND} php artisan migrate --env=testing --database=pgsql_test
 phpunit: # run phpunit tests (use EXEC_COMMAND to run without docker compose, use PHPUNIT_TEST_PATH to run specific tests)
 	${EXEC_COMMAND} php artisan test -d memory_limit=-1 ${PHPUNIT_TEST_PATH}
+phpspec: # run phpspec tests (use EXEC_COMMAND to run without docker compose)
+	${EXEC_COMMAND} php vendor/bin/phpspec run
 behat: # run behat tests (use EXEC_COMMAND to run without docker compose)
 	${EXEC_COMMAND} php -d memory_limit=-1 vendor/bin/behat
 generate_key: # generate key for laravel (use EXEC_COMMAND to run without docker compose)
