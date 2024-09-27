@@ -9,8 +9,16 @@ use App\Repository\ProductCatalogueInterface;
 
 readonly class CreateProduct
 {
-    public function __construct(private ProductCatalogueInterface $productCatalogue, private ProductCreatorInterface $productCreator)
-    {}
+    private ProductCatalogueInterface $productCatalogue;
+    private ProductCreatorInterface $productCreator;
+
+    public function __construct(
+        ProductCatalogueInterface $productCatalogue,
+        ProductCreatorInterface $productCreator
+    ) {
+        $this->productCatalogue = $productCatalogue;
+        $this->productCreator = $productCreator;
+    }
 
     public function __invoke(CreateProduct\Command $command): void
     {
