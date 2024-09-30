@@ -14,4 +14,5 @@ default:
             paths: [ '%paths.base%/features' ]
             # The context needed by your features tests
             contexts:
-              - Tests\Behat\MainContext: ~
+              - Tests\Behat\MainContext:
+                  createProduct: '@App\Service\CreateProduct'

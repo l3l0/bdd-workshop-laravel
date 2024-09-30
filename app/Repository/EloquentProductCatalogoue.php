@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Models\Product;
 use App\Models\Product\ProductType;
 use App\Models\ProductInterface;
+use Ramsey\Uuid\UuidInterface;
 
 class EloquentProductCatalogoue implements ProductCatalogueInterface
 {
@@ -24,5 +25,10 @@ class EloquentProductCatalogoue implements ProductCatalogueInterface
         }
 
         throw new \RuntimeException('Product must be an instance of Product');
+    }
+
+    public function delete(UuidInterface $id): void
+    {
+        Product::query()->where('id', $id->toString())->delete();
     }
 }

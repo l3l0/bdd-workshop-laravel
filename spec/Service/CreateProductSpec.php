@@ -2,6 +2,7 @@
 
 namespace spec\App\Service;
 
+use App\Models\Product\ProductType;
 use App\Models\ProductInterface;
 use App\Service\CreateProduct;
 use App\Repository\ProductCatalogueInterface;
@@ -27,7 +28,7 @@ class CreateProductSpec extends ObjectBehavior
         // arrange
         $command = new CreateProduct\Command(
             id: Uuid::fromString('f1b9f4b0-0b1e-4b7b-8b3e-3f0b6f1f5f7d'),
-            productType: Product\ProductType::LpsMax,
+            productType: ProductType::LpsMax,
             name: 'LPS MAX',
             isCollective: false,
             isLeasingProduct: true,
@@ -39,7 +40,7 @@ class CreateProductSpec extends ObjectBehavior
             ],
         );
         $productCreator->create($command)->willReturn($product);
-        $productCatalogue->existsForType(Product\ProductType::LpsMax)->willReturn(false);
+        $productCatalogue->existsForType(ProductType::LpsMax)->willReturn(false);
 
         // act
         $this->__invoke($command);

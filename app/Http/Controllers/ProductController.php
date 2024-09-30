@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Product\ProductType;
+use App\Repository\ProductCatalogueInterface;
 use App\Service\CreateProduct;
 use App\Service\CreateProduct\Command;
 use Illuminate\Http\JsonResponse;
@@ -34,5 +35,13 @@ class ProductController extends Controller
             'is_leasing_product' => $command->isLeasingProduct,
             'rp_ratings' => $command->rpRatings
         ], 201);
+    }
+
+    public function delete(string $id, ProductCatalogueInterface $productCatalogue): JsonResponse
+    {
+        $productCatalogue->delete(UUid::fromString($id));
+        return response()->json([
+            'id' => $id
+        ], 200);
     }
 }
